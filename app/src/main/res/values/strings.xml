@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">taskForce</string>
+    <string name="add">ADD</string>
+    <string name="restore">RESTORE</string>
+    <string name="task">Type in your Task</string>
+    <string name="add_title">Add Task</string>
+    <string name="title">TO-Do List</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="Example">Example task</string>
+</resources>

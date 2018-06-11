@@ -7,5 +7,5 @@
     <string name="title">TO-Do List</string>
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
-    <string name="Example">Example task</string>
+    <string name="Example"><strike>Example task</strike></string>
 </resources>

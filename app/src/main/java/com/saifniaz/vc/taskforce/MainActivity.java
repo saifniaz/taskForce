@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.Presentation;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.MediaDataSource;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -120,6 +122,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*public void checkChores(View v){
+        TextView temp = ((TextView)v);
+        temp.setPaintFlags(temp.getPaintFlags() |
+                Paint.STRIKE_THRU_TEXT_FLAG);
+        temp.setPaintFlags(temp.getPaintFlags() &
+                (~ Paint.STRIKE_THRU_TEXT_FLAG));
+
+    }*/
+
+
+
     public void OpenFile(){
         try {
 
@@ -130,15 +143,6 @@ public class MainActivity extends AppCompatActivity {
                 setTask(line);
             }
 
-            /*InputStream inputStream = getResources().openRawResource(
-                    getResources().getIdentifier("data", "raw",
-                            getPackageName())
-            );
-            InputStreamReader streamReader = new InputStreamReader(inputStream);
-            BufferedReader reader = new BufferedReader(streamReader);
-            for(String line; (line = reader.readLine()) != null;){
-                setTask(line);
-            }*/
             inputStream.close();
             streamReader.close();
             reader.close();
@@ -148,16 +152,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CheckTask(View v){
-        if(index < complete){
-            return;
-        }else{
-            if(((CheckBox)v).isChecked()){
-                complete++;
-            }else if(!((CheckBox)v).isChecked()){
-                complete--;
+        LinearLayout layout = ((LinearLayout)v);
+        int i = 0, c = layout.getChildCount();
+
+        while(i < c){
+            View check = layout.getChildAt(i);
+            CheckBox box = (CheckBox)check;
+            i++;
+            View text = layout.getChildAt(i);
+            TextView tv = (TextView)text;
+            if(index < complete){
+                    return;
+            }else{
+                if(!box.isChecked()){
+                    box.setChecked(true);
+                    tv.setPaintFlags(tv.getPaintFlags() |
+                            Paint.STRIKE_THRU_TEXT_FLAG);
+                    complete++;
+                }else if(box.isChecked()){
+                    box.setChecked(false);
+                    tv.setPaintFlags(tv.getPaintFlags() &
+                            (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                    complete--;
+                }
             }
-            progress.setText(""+complete+"/"+index+"");
+            i++;
         }
+        progress.setText(""+complete+"/"+index+"");
     }
 
     public void setTask(String chores){
@@ -169,27 +190,52 @@ public class MainActivity extends AppCompatActivity {
             list.removeAllViewsInLayout();
         }
 
+
+        //Add Linear Layout
+
+        LinearLayout tas = new LinearLayout(this);
+        tas.setOrientation(LinearLayout.HORIZONTAL);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+
+
+
         //Append Checkboxes
-        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
 
         CheckBox box = new CheckBox(this);
-        box.setText(chores);
+        box.setLayoutParams(params1);
+        box.setEnabled(false);
+        TextView text = new TextView(this);
+        text.setText(chores);
+        text.setTypeface(Typeface.create("casual", Typeface.BOLD));
+        text.setTextColor(getResources().getColor(R.color.black));
+        text.setLayoutParams(params);
         box.setPadding(pixels, pixels, pixels, pixels);
+
+        tas.addView(box);
+        tas.addView(text);
+
         if(index%3== 0){
-            box.setBackgroundColor(getResources().getColor(R.color.orangeLight));
+            tas.setBackgroundColor(getResources().getColor(R.color.orangeLight));
         }else if(index%3== 1){
-            box.setBackgroundColor(getResources().getColor(R.color.greenLight));
+            tas.setBackgroundColor(getResources().getColor(R.color.greenLight));
         }else{
-            box.setBackgroundColor(getResources().getColor(R.color.blueLight));
+            tas.setBackgroundColor(getResources().getColor(R.color.blueLight));
         }
-        box.setOnClickListener(new View.OnClickListener(){
+        tas.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 CheckTask(view);
             }
         });
 
-        list.addView(box);
+        list.addView(tas, params);
 
         index++;
         progress.setText(""+complete+"/"+index+"");

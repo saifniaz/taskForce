@@ -35,15 +35,30 @@
             android:layout_margin="20dp"
             android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/checkBox3"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:background="@color/orangeLight"
-                android:padding="15dp"
-                android:onClick="CheckTask"
-                android:enabled="false"
-                android:text="@string/Example" />
+                >
+
+                <CheckBox
+                    android:id="@+id/checkBox3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:enabled="false"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="casual"
+                    android:textColor="#000000"
+                    android:text="@string/Example" />
+            </LinearLayout>
 
         </LinearLayout>
 
